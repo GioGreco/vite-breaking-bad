@@ -1,18 +1,13 @@
 <template>
   <HeaderComponent title="Breaking Bad Api"/>
   <main class="container">
-    <div class="select-category pt-5 pb-3 px-3">
-      <select name="series-selector" id="series-selector">
-        <option value="BB">Breaking Bad</option>
-        <option value="BCS">Better Call Saul</option>
-      </select>
-    </div>
+    <FilterComponent @filtCat="callBBapi"/>
     <div class="charList p-5">
-      <div v-if="loading">
+      <div v-if="store.loading">
         <div class="matches">
-          Found {{characterList.length}} characters
+          Found {{store.characterList.length}} characters
         </div>
-        <CharactersListComponent :characters="characterList" :load="loading"/>
+        <CharactersListComponent/>
       </div>
       <div v-else class="loading d-flex justify-content-center align-items-center">
         <div class="position-relative w-100 h-100">
@@ -29,30 +24,40 @@ import axios from 'axios';
 import HeaderComponent from './components/HeaderComponent.vue';
 import CharactersListComponent from './components/CharactersListComponent.vue'
 
+import {store} from './store';
+import FilterComponent from './components/FilterComponent.vue';
+
   export default {
-    components: { 
-      HeaderComponent,
-      CharactersListComponent
-    },
+    components: {
+    HeaderComponent,
+    CharactersListComponent,
+    FilterComponent,
+},
     data(){
       return{
-        apiURL: 'https://www.breakingbadapi.com/api/characters',
-        characterList: [],
-        loading: false
+        store,
+        endpoint: 'characters'
       }
     },
     methods: {
       callBBapi(){
-        this.loading = false;
-        axios.get(this.apiURL).then((res)=>{
-          console.log(res.data);
-          this.characterList = [...res.data];
-          console.log(this.characterList);
-          setTimeout(() => this.loading = true, 2000)
+        store.loading = false;
+
+        const currentEndpoint = store.apiURL + this.endpoint;
+
+        let myFilter = {
+          params: {
+            category: store.categorySelector
+          }
+        }
+
+        axios.get(currentEndpoint, myFilter).then((res)=>{
+          store.characterList = [...res.data];
+          setTimeout(() => store.loading = true, 2000)
         })
       }
     },
-    mounted(){
+    created(){
       this.callBBapi();
     }
 }
@@ -62,15 +67,6 @@ import CharactersListComponent from './components/CharactersListComponent.vue'
 @use './assets/styles/partials/variables' as *;
 
   main{
-
-    .select-category{
-      
-      #series-selector{
-        padding: 10px;
-        border-radius: 10px;
-      }
-    }
-
     .charList{
       background-color: white;
 
