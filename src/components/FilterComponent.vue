@@ -6,7 +6,7 @@
           <option value="Breaking Bad">Breaking Bad</option>
           <option value="Better Call Saul">Better Call Saul</option>
         </select>
-        <button type="submit" class="btn btn-primary text-uppercase mx-3">Filtra per stagione</button>
+        <button type="submit" class="btn btn-primary text-uppercase mx-3">Filtra per serie</button>
         <button @click="resetFilter" type="reset" class="btn btn-danger"><i class="fa-solid fa-ban"></i></button>
       </form>
     </div>
@@ -22,6 +22,11 @@ import {store} from '../store';
                 store
             }
         },
+        // watch: {
+        //     store: {
+        //         handler: 'this.$parent.callBBapi()'
+        //     }
+        // },
         methods: {
             filterPerCategory(){
                 this.$emit('filtCat');

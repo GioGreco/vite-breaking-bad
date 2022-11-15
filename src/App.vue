@@ -39,6 +39,12 @@ import FilterComponent from './components/FilterComponent.vue';
         endpoint: 'characters'
       }
     },
+    watch:{
+      store: {
+        handler: 'callBBapi',
+        immediate: true
+      }
+    },
     methods: {
       callBBapi(){
         store.loading = false;
@@ -57,9 +63,9 @@ import FilterComponent from './components/FilterComponent.vue';
         })
       }
     },
-    created(){
-      this.callBBapi();
-    }
+    // created(){
+    //   this.callBBapi();
+    // }
 }
 </script>
 
@@ -83,10 +89,10 @@ import FilterComponent from './components/FilterComponent.vue';
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        animation: loading 1s infinite;
 
         &.grey{
           background-color: $grey-card-frame;
+          animation: loading 1s infinite;
         }
         &.darkgrey{
           background-color: $grey-text;
